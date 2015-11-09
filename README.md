@@ -4,6 +4,8 @@ This repository features a Giant Swarm service consisting of multiple components
 
 ## Component Overview
 
+Checkout the `swarm.json` and the `docker-compose.yml` files for a more technical description of what this example service provides.
+
 ![Component Overview](https://github.com/giantswarm/twitter-hot-urls-example/blob/master/_docs/components-overview.png)
 
 ### twittertracker
