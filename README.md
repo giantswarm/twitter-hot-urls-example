@@ -32,7 +32,7 @@ This component contains a little script that watches the size of the `inbox` Red
 
 As a future improvement, the `urlresolverscaler` can be modified to actually initiate the scaling of the `urlresolver` component via the Giant Swarm API.
 
-## hotlist
+### hotlist
 
 This second Redis database component stores all resolved URLs together with scoring information. It also contains the cache for the `urlresolver`. Just like the `inbox` component, we use the official Redis Docker image here.
 
