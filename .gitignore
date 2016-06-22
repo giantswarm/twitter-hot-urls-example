@@ -1,3 +1,4 @@
-docker-compose.yml
 swarmvars.json
+set_secrets.sh
 *.pyc
+venv/

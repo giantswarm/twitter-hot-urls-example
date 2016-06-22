@@ -1,0 +1,107 @@
+{
+  "name": "twitter-hot-urls",
+  "components": {
+    "inbox": {
+      "image": "redis:latest",
+      "ports": 6379
+    },
+    "twittertracker": {
+      "image": "giantswarm/thux-twittertracker:latest",
+      "links": [
+        {
+          "component": "inbox",
+          "alias": "redis",
+          "target_port": 6379
+        }
+      ],
+      "env": {
+        "TWITTER_TRACKING_QUERY": "$TWITTER_TRACKING_QUERY",
+        "TWITTER_ACCESS_TOKEN": "$TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_TOKEN_SECRET": "$TWITTER_ACCESS_TOKEN_SECRET",
+        "TWITTER_CONSUMER_KEY": "$TWITTER_CONSUMER_KEY",
+        "TWITTER_CONSUMER_SECRET": "$TWITTER_CONSUMER_SECRET"
+      }
+    },
+    "hotlist": {
+      "image": "redis:latest",
+      "ports": 6379,
+      "volumes": [
+        {
+          "path": "/data",
+          "size": "1 GB"
+        }
+      ]
+    },
+    "hotlistcleaner": {
+      "image": "giantswarm/thux-hotlistcleaner:latest",
+      "links": [
+        {
+          "component": "hotlist",
+          "alias": "redis",
+          "target_port": 6379
+        }
+      ]
+    },
+    "urlresolver": {
+      "image": "giantswarm/thux-urlresolver:latest",
+      "scale": {"min": 3},
+      "links": [
+        {
+          "component": "inbox",
+          "alias": "incomingredis",
+          "target_port": 6379
+        },
+        {
+          "component": "hotlist",
+          "alias": "outgoingredis",
+          "target_port": 6379
+        }
+      ]
+    },
+    "urlresolverscaler": {
+      "image": "giantswarm/thux-urlresolverscaler:latest",
+      "scale": {"max": 1},
+      "links": [
+        {
+          "component": "inbox",
+          "alias": "redis",
+          "target_port": 6379
+        }
+      ]
+    },
+    "rebrow": {
+      "image": "marian/rebrow:latest",
+      "ports": 5001,
+      "domains": {
+        "5001": "rebrow.$DOMAIN"
+      },
+      "links": [
+        {
+          "component": "inbox",
+          "target_port": 6379
+        },
+        {
+          "component": "hotlist",
+          "target_port": 6379
+        }
+      ]
+    },
+    "frontend": {
+      "image": "giantswarm/thux-frontend:latest",
+      "ports": 8000,
+      "env": {
+        "BASE_URL": "http://frontend.$DOMAIN"
+      },
+      "domains": {
+        "8000": "frontend.$DOMAIN"
+      },
+      "links": [
+        {
+          "component": "hotlist",
+          "alias": "redis",
+          "target_port": 6379
+        }
+      ]
+    }
+  }
+}
