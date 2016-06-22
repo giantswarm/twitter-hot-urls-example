@@ -2,6 +2,12 @@
 
 This repository features a Giant Swarm service consisting of multiple components working hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs.
 
+Contents:
+
+- [Component Overview](#component-overview)
+- [Configuring the Service](#configuring-the-service)
+- [Starting the Service](#starting-the-service)
+
 ## Component Overview
 
 Checkout the `swarm.json` and the `docker-compose.yml` files for a more technical description of what this example service provides.
@@ -51,3 +57,33 @@ This is a Python/Flask web application that offers a JSON API to fetch the resul
 ### rebrow
 
 The `rebrow` component offers a web-based user interface ("rebrow" stands for "redis browser") to debug the content of both Redis databases. It makes use of a third party Docker image.
+
+## Configuring the Service
+
+To make the service work for you, you'll have to configure a few things. The components are built so that they take all required configuration from environment variables. In addition, we make use of the possiblility to pass variables to a service definition during creation by using a variables file called `swarmvars.json`.
+
+Please copy the provided example file `swarmvars.json.dist` to `swarmvars.json`. Then edit the details in this file as explained below.
+
+* Set the string `myorg/myenv` to the name of the environment in which you want to run the service. If you don't work in a team with multiple users, simple use your Giant Swarm username instead of `myorg` here. Otherwise pick the organization name you need. Check out our guide on [Team Collaboration](https://docs.giantswarm.io/guides/team-collaboration/) for details. For the `myenv` part, pick an existing environment name from the chosen organization. The default here would be `dev`, so you can chose `<yourusername>/dev`.
+* `DOMAIN`: The second part of the domain name used for public access to some of the components. Make this something like `mythux.gigantic.io` when working with the shared ALpha cluster of Giant Swarm. Other clusters may require a different domain name.
+* `TWITTER_*`: The twitter credentials to use for the tracker. To create them, log in  to https://apps.twitter.com/ (creating a twitter account first, if needed) and create a new app. The variable names should match the terminology used by Twitter.
+
+Save the edited `swarmvars.json` file.
+
+## Starting the Service
+
+Make sure you are [logged in](https://docs.giantswarm.io/reference/cli/login/) with the `swarm` CLI.
+
+Starting the service as defined above can be done using the CLI, from the directory containing the `swarm.json` and `swarmvars.json` file. Use the following command to create and start the service:
+
+```
+swarm up
+```
+
+After a few minutes, you can check the status of the service using the command
+
+```
+swarm status
+```
+
+or using the [Giant Swarm web user interface](https://app.giantswarm.io/).
