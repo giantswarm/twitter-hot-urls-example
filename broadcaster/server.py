@@ -13,17 +13,6 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 thread = None
 
-#def background_thread():
-#    """Example of how to send server generated events to clients."""
-#    count = 0
-#    while True:
-#        time.sleep(10)
-#        count += 1
-#        socketio.emit('my response',
-#                      {'data': 'Server generated event', 'count': count},
-#                      namespace='/test')
-
-
 def background_thread():
     r = False
     print("Starting background_thread()")
