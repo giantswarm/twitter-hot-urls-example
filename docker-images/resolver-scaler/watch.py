@@ -19,7 +19,7 @@ if __name__ == "__main__":
     r = False
     while not r:
         try:
-            r = StrictRedis(host="redis", port=6379, db=0)
+            r = StrictRedis(host="inbox-redis", port=6379, db=0)
         except:
             print("Waiting for redis...")
             time.sleep(2)

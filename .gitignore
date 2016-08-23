@@ -1,4 +1,1 @@
-swarmvars.json
-set_secrets.sh
-*.pyc
-venv/
+secrets/

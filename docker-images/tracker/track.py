@@ -8,8 +8,17 @@ from twython import TwythonStreamer
 import time
 from redis import StrictRedis
 import signal
+import timeit
 
 QUERY = os.getenv("TWITTER_TRACKING_QUERY")
+
+# FIXME improve naming according to
+# https://prometheus.io/docs/practices/naming/
+
+metrics_template = """tracker_processed_urls_in_last_tweet_count {0}
+tracker_processed_tweets_total {1}
+tracker_processed_last_tweet_duration_seconds {2}
+"""
 
 def sigterm_handler(_signo, _stack_frame):
     print("Terminating due to SIGTERM")
@@ -36,7 +45,16 @@ class MyStreamer(TwythonStreamer):
             return
         if len(data["entities"]["urls"]) == 0:
             return
-        process_tweet(data)
+
+        start_time = timeit.default_timer()
+        process_tweet_metrics = process_tweet(data)
+        tracker_processed_last_tweet_duration_seconds = timeit.default_timer() - start_time
+
+        with open('/tmp/metrics', 'w') as f:
+            f.write(metrics_template.format(
+                process_tweet_metrics['tracker_processed_urls_in_last_tweet_count'],
+                self.tweet_count,
+                tracker_processed_last_tweet_duration_seconds))
 
     def on_error(self, status_code, data):
         sys.stderr.write("ERROR %s - %s\n" % (status_code, data))
@@ -65,8 +83,8 @@ def process_tweet(data):
     for url in data["entities"]["urls"]:
         urls.append(url["expanded_url"])
 
-    if len(urls) == 0:
-        return
+    # if len(urls) == 0:
+    #     return
 
     # store URLs to redis
     for url in urls:
@@ -75,6 +93,7 @@ def process_tweet(data):
         redis.lpush(key, value)
 
     print('Processed tweet %s with %d URLs' % (data['id'], len(urls)))
+    return {'tracker_processed_urls_in_last_tweet_count': len(urls)}
 
 
 
@@ -93,7 +112,7 @@ if __name__ == '__main__':
 
     # Redis connection
     print("Connecting to Redis host 'redis' on port 6379")
-    redis = StrictRedis(host='redis', port=6379, db=0)
+    redis = StrictRedis(host='inbox-redis', port=6379, db=0)
 
     print "Starting tweet tracking"
 

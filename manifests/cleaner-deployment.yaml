@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cleaner
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: thux
+        component: cleaner
+    spec:
+      containers:
+      - name: scaler-resolver
+        image: giantswarm/thux-cleaner
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8000

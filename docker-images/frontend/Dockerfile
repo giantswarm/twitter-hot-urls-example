@@ -10,4 +10,3 @@ EXPOSE 8000
 WORKDIR /
 
 CMD ["gunicorn", "-c", "gunicorn.conf", "server:app"]
-

@@ -28,31 +28,38 @@ import sys
 import socket
 import signal
 import ssl
+import timeit
 
 
 INCOMING_KEY = "incoming_urls"
 
-REPORTING_INTERVAL = 10
+# REPORTING_INTERVAL = 10
 
 URL_HANDLED_TTL = 3600
-
 HOTLIST_TTL = 3600
 
-MAXIMUM_JOBS = 5000
+# MAXIMUM_JOBS = 5000
+
+# FIXME improve naming according to
+# https://prometheus.io/docs/practices/naming/
+
+metrics_template = """resolver_urls_resolved_total {0}
+resolver_url_resolve_last_duration_seconds {1}
+"""
 
 incoming = False
 outgoing = False
 
 while not incoming:
     try:
-        incoming = StrictRedis(host="incomingredis", port=6379, db=0)
+        incoming = StrictRedis(host="inbox-redis", port=6379, db=0)
     except:
         print("Waiting for incomingredis...")
         time.sleep(2)
 
 while not outgoing:
     try:
-        outgoing = StrictRedis(host="outgoingredis", port=6379, db=0)
+        outgoing = StrictRedis(host="hotlist-redis", port=6379, db=0)
     except:
         print("Waiting for outgoingredis...")
         time.sleep(2)
@@ -131,29 +138,33 @@ def store_resolved_url(resolved_url):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGTERM, sigterm_handler)
-    count = 0
-    timer = time.time()
+    urls_resolved_total = 0
+    nothing_to_do = False
 
     try:
         while True:
             url = fetch_url()
+
             if url is not None:
+                start_time = timeit.default_timer()
                 resolved_url = resolve_url(url)
+                url_resolve_last_duration_seconds = timeit.default_timer() - start_time
+
                 if resolved_url is not None:
                     store_resolved_url(resolved_url)
-                count += 1
-
-                # Stats reporting
-                if count % REPORTING_INTERVAL == 0:
-                    now = time.time()
-                    duration = now - timer
-                    timer = now
-                    print("Resolving 10 URLs took %.1f Sec (%.1f Sec per URL)" % (duration, duration/REPORTING_INTERVAL))
+                urls_resolved_total += 1
             else:
+                nothing_to_do = True
+                url_resolve_last_duration_seconds = 'NaN'
+
+            # write metrics to file in prometheus format
+            with open('/tmp/metrics', 'w') as f:
+                f.write(metrics_template.format(urls_resolved_total, url_resolve_last_duration_seconds))
+
+            # don't overheat
+            if nothing_to_do:
                 time.sleep(3)
-            if count > MAXIMUM_JOBS:
-                print("Quitting process, reached %d jobs." % MAXIMUM_JOBS)
-                # Quitting with exit code 1 will make Giant Swarm restart the instance
-                sys.exit(1)
+                nothing_to_do = False
+
     finally:
         print("Exiting")

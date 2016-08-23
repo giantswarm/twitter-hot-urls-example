@@ -1,6 +1,8 @@
 # twitter-hot-urls-example (`thux`)
 
-This repository features a Giant Swarm service consisting of multiple components working hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs.
+This repository features an example service consisting of multiple components working hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs.
+
+It can be run with docker-compose or Kubernetes.
 
 Contents:
 
@@ -10,11 +12,13 @@ Contents:
 
 ## Component Overview
 
-Checkout the `swarm.json` and the `docker-compose.yml` files for a more technical description of what this example service provides.
+Checkout the `docker-compose.yml` files for a more technical description of what this example service provides. Compare with the Kubernetes manifests in the `kubernetes` foleder.
 
-![Component Overview](https://github.com/giantswarm/twitter-hot-urls-example/blob/master/_docs/components-overview.png)
+<!-- ![Component Overview](https://github.com/giantswarm/twitter-hot-urls-example/blob/master/_docs/components-overview.png) -->
 
-### twittertracker
+![Component Overview](/_docs/components-overview.png)
+
+### tracker
 
 This component consumes the Twitter Stream API, looking for tweets containing the strings `http` or `https` to fetch all tweets with links. The tweets are then parsed for contained URLs.
 
@@ -22,31 +26,31 @@ The URLs found are stored in the `inbox` redis database.
 
 ### inbox
 
-This component is a simple Redis database that receives all found URLs from the `twittertracker` component. It makes use of the official Redis Docker image.
+This component is a simple Redis database that receives all found URLs from the `tracker` component. It makes use of the official Redis Docker image.
 
 This component consciously does not provide a volume, which means that whenever this component is restarted, the database content is lost.
 
-### urlresolver
+### resolver
 
 The script inside this component reads URLs from the `inbox` Redis database and creates requests to those URLs in order to resolve redirects, to reveal the actual target URL. The resulting URL is stored in the `hotlist` Redis database.
 
 To prevent accessing the same URL several times, a cache is maintained in the `hotlist` Redis.
 
-The `urlresolver` component can be thought of as a worker, processing jobs from a queue. Since resolving URLs is in many cases a time-consuming job, there can be multiple instances of this component working in parallel.
+The `resolver` component can be thought of as a worker, processing jobs from a queue. Since resolving URLs is in many cases a time-consuming job, there can be multiple instances of this component working in parallel.
 
-### urlresolverscaler
+### resolver-scaler
 
-This component contains a little script that watches the size of the `inbox` Redis database to find out if it remains constant. In case it's growing, it logs this information and tells that there shoul be more `urlresolver` instances to prevent the inbox from growing too big.
+This component contains a little script that watches the size of the `inbox` Redis database to find out if it remains constant. In case it's growing, it logs this information and tells that there shoul be more `resolver` instances to prevent the inbox from growing too big.
 
-As a future improvement, the `urlresolverscaler` can be modified to actually initiate the scaling of the `urlresolver` component via the Giant Swarm API.
+As a future improvement, the `resolver-scaler` can be modified to actually initiate the scaling of the `resolver` component via the Giant Swarm API.
 
 ### hotlist
 
-This second Redis database component stores all resolved URLs together with scoring information. It also contains the cache for the `urlresolver`. Just like the `inbox` component, we use the official Redis Docker image here.
+This second Redis database component stores all resolved URLs together with scoring information. It also contains the cache for the `resolver`. Just like the `inbox` component, we use the official Redis Docker image here.
 
 In contrast to the `inbox` component, the `hotlist` provides a volume to persist the database throughout restarts.
 
-### hotlistcleaner
+### hotlist-cleaner
 
 This component contains a little helper that periodically removes outdated information from the `hotlist` Redis database.
 
@@ -58,7 +62,7 @@ This is a Python/Flask web application that offers a JSON API to fetch the resul
 
 The `rebrow` component offers a web-based user interface ("rebrow" stands for "redis browser") to debug the content of both Redis databases. It makes use of a third party Docker image.
 
-## Configuring the Service
+<!-- ## Configuring the Service
 
 To make the service work for you, you'll have to configure a few things. The components are built so that they take all required configuration from environment variables. In addition, we make use of the possiblility to pass variables to a service definition during creation by using a variables file called `swarmvars.json`.
 
@@ -86,4 +90,36 @@ After a few minutes, you can check the status of the service using the command
 swarm status
 ```
 
-or using the [Giant Swarm web user interface](https://app.giantswarm.io/).
+or using the [Giant Swarm web user interface](https://app.giantswarm.io/). -->
+
+## Credentials to Access Twitter API
+
+To access the [streaming API](https://dev.twitter.com/streaming/overview/connecting) of Twitter an personalized [account](https://twitter.com/signup) is needed and some app specific credentials created at [Twitter Application Management](https://apps.twitter.com/).
+
+For example:
+
+    Name: thux
+    Description: Tracks URLs mentioned on Twitter and creates a ranked list
+    Website: https://github.com/giantswarm/twitter-hot-urls-example
+    Callback URL: <leave this field blank>
+
+
+Additionally an Access Token needs to be generated under "Keys and Access Tokens". In the end four secrets or tokens need to be edited in `_secrets/twitter-api-secret.env` for the docker-compose setup and in `_secrets/twitter-api-secret.yaml` to run the Kubernetes example. For Kubernetes these values need to be encoded with `base64`, please see [Kubernetes documentation](http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually) about secrets.
+
+
+
+
+
+## Starting with Docker Compose
+
+```bash
+docker-compose up -d
+docker-compose ps
+docker-compose logs
+
+docker-compose stop tracker
+
+docker network ls
+docker network inspect thux_default
+
+```
