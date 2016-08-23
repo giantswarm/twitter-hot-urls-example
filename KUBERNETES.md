@@ -5,8 +5,8 @@
 > If some webpages don't show up immediately wait a bit and reload. Also the Kubernetes Dashboard needs reloading to update its view.
 
 ```bash
-minikube start
-# minikube start --vm-driver kvm
+minikube start --memory 2048
+# --vm-driver kvm
 
 minikube dashboard
 #^ maybe wait a bit and retry
@@ -18,7 +18,7 @@ kubectl get --all-namespaces services,pods
 ```bash
 kubectl create namespace monitoring
 kubectl --namespace monitoring create \
-  --filename https://raw.githubusercontent.com/giantswarm/kubernetes-prometheus/grand-relabeling/manifests-all.yaml
+  --filename https://raw.githubusercontent.com/giantswarm/kubernetes-prometheus/master/manifests-all.yaml
 minikube service --namespace monitoring prometheus
   # see /targets
 minikube service --namespace monitoring grafana
@@ -48,7 +48,7 @@ printf "exampletokenxyz" | base64
 kubectl create namespace thux
 kubectl --namespace thux create --filename secrets/twitter-api-secret.yaml
 kubectl --namespace thux create \
-  --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/kubernetes/manifests-all.yaml
+  --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/master/manifests-all.yaml
 
 # there is an api limit. to not hit that accidentally, let's pause the tracker for now:
 kubectl --namespace thux scale deployments/tracker --replicas 0
