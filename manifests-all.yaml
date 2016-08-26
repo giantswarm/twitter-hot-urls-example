@@ -13,7 +13,7 @@ spec:
         component: cleaner
     spec:
       containers:
-      - name: scaler-resolver
+      - name: cleaner
         image: giantswarm/thux-cleaner
         resources:
           requests:
@@ -138,10 +138,13 @@ data:
                   "min": false,
                   "show": true,
                   "total": false,
-                  "values": false
+                  "values": false,
+                  "alignAsTable": true,
+                  "rightSide": true
                 },
                 "lines": true,
                 "linewidth": 2,
+                "links": [],
                 "nullPointMode": "connected",
                 "percentage": false,
                 "pointradius": 5,
@@ -154,21 +157,21 @@ data:
                 "targets": [
                   {
                     "expr": "rate(tracker_processed_tweets_total[1m])",
+                    "interval": "",
                     "intervalFactor": 2,
                     "legendFormat": "{{ component }} {{ pod_template_hash }}",
                     "metric": "",
                     "refId": "A",
-                    "step": 2,
-                    "interval": ""
+                    "step": 2
                   },
                   {
                     "expr": "rate(resolver_urls_resolved_total[1m])",
+                    "interval": "",
                     "intervalFactor": 2,
+                    "legendFormat": "{{ component }} {{ pod_template_hash }}",
                     "metric": "",
                     "refId": "B",
-                    "step": 2,
-                    "legendFormat": "{{ component }} {{ pod_template_hash }}",
-                    "interval": ""
+                    "step": 2
                   }
                 ],
                 "timeFrom": null,
@@ -201,107 +204,108 @@ data:
                     "min": null,
                     "show": true
                   }
-                ],
-                "links": []
+                ]
               }
             ],
             "title": "Row"
           },
           {
-            "title": "New row",
-            "height": "250px",
-            "editable": true,
             "collapse": false,
+            "editable": true,
+            "height": "250px",
             "panels": [
               {
-                "title": "duration",
-                "error": false,
-                "span": 12,
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "${DS_PROMETHEUS}",
                 "editable": true,
-                "type": "graph",
-                "isNew": true,
+                "error": false,
+                "fill": 1,
+                "grid": {
+                  "threshold1": null,
+                  "threshold1Color": "rgba(216, 200, 27, 0.27)",
+                  "threshold2": null,
+                  "threshold2Color": "rgba(234, 112, 112, 0.22)"
+                },
                 "id": 2,
+                "isNew": true,
+                "legend": {
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "show": true,
+                  "total": false,
+                  "values": false,
+                  "alignAsTable": true,
+                  "rightSide": true
+                },
+                "lines": true,
+                "linewidth": 2,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "span": 12,
+                "stack": false,
+                "steppedLine": false,
                 "targets": [
                   {
-                    "refId": "A",
                     "expr": "tracker_processed_last_tweet_duration_seconds",
+                    "interval": "",
                     "intervalFactor": 2,
-                    "metric": "tracker_processed_last_tweet_duration_seconds",
-                    "step": 2,
                     "legendFormat": "{{ component }} {{pod_template_hash }}",
-                    "interval": ""
+                    "metric": "tracker_processed_last_tweet_duration_seconds",
+                    "refId": "A",
+                    "step": 2
                   },
                   {
                     "expr": "resolver_url_resolve_last_duration_seconds",
+                    "interval": "",
                     "intervalFactor": 2,
-                    "refId": "B",
-                    "metric": "resolver_url_resolve_last_duration_seconds",
-                    "step": 2,
                     "legendFormat": "{{ component }} {{pod_template_hash }}",
-                    "interval": ""
+                    "metric": "resolver_url_resolve_last_duration_seconds",
+                    "refId": "B",
+                    "step": 2
                   }
                 ],
-                "datasource": "${DS_PROMETHEUS}",
-                "renderer": "flot",
-                "yaxes": [
-                  {
-                    "label": null,
-                    "show": true,
-                    "logBase": 1,
-                    "min": null,
-                    "max": null,
-                    "format": "s"
-                  },
-                  {
-                    "label": null,
-                    "show": true,
-                    "logBase": 1,
-                    "min": null,
-                    "max": null,
-                    "format": "short"
-                  }
-                ],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "duration",
+                "tooltip": {
+                  "msResolution": true,
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "cumulative"
+                },
+                "type": "graph",
                 "xaxis": {
                   "show": true
                 },
-                "grid": {
-                  "threshold1": null,
-                  "threshold2": null,
-                  "threshold1Color": "rgba(216, 200, 27, 0.27)",
-                  "threshold2Color": "rgba(234, 112, 112, 0.22)"
-                },
-                "lines": true,
-                "fill": 1,
-                "linewidth": 2,
-                "points": false,
-                "pointradius": 5,
-                "bars": false,
-                "stack": false,
-                "percentage": false,
-                "legend": {
-                  "show": true,
-                  "values": false,
-                  "min": false,
-                  "max": false,
-                  "current": false,
-                  "total": false,
-                  "avg": false
-                },
-                "nullPointMode": "connected",
-                "steppedLine": false,
-                "tooltip": {
-                  "value_type": "cumulative",
-                  "shared": true,
-                  "sort": 0,
-                  "msResolution": true
-                },
-                "timeFrom": null,
-                "timeShift": null,
-                "aliasColors": {},
-                "seriesOverrides": [],
-                "links": []
+                "yaxes": [
+                  {
+                    "format": "s",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  },
+                  {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  }
+                ]
               }
-            ]
+            ],
+            "title": "New row"
           }
         ],
         "time": {
@@ -339,8 +343,9 @@ data:
         "annotations": {
           "list": []
         },
+        "refresh": "5s",
         "schemaVersion": 12,
-        "version": 7,
+        "version": 1,
         "links": [],
         "gnetId": null
       },
