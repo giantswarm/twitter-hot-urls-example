@@ -11,7 +11,7 @@ spec:
         component: cleaner
     spec:
       containers:
-      - name: scaler-resolver
+      - name: cleaner
         image: giantswarm/thux-cleaner
         resources:
           requests:

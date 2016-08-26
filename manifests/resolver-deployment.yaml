@@ -24,10 +24,10 @@ spec:
         volumeMounts:
           - name: metrics
             mountPath: /tmp
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 100Mi
       - name: metrics
         image: dockermuenster/caddy:0.9
         command:
