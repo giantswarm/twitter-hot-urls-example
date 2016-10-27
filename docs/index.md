@@ -1,10 +1,10 @@
-+++ title = "Microservices & Custom Metrics Example (THUX)" description = "Here we show how to build microservices and offer Prometheus custom metrics in your application." date = "2016-10-27" type = "page" weight = 100 categories = ["guides"] +++
++++ title = "Microservices & Custom Metrics Example" description = "Here we show how to build microservices and offer Prometheus custom metrics in your application." date = "2016-10-27" type = "page" weight = 100 categories = ["guides"] +++
 
-# Microservices & Custom Metrics Example (THUX)
+# Microservices & Custom Metrics Example
 
 In this example we show how to build a simpe Microservice application that offer custom Prometheus metrics.
 
-The multiple components work hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs.
+The multiple components work hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs. We call this example internally Twitter Hot URLs Example - short THUX.
 
 Contents:
 
