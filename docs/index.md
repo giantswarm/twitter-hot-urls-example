@@ -80,7 +80,8 @@ __Note:__ To get custom metrics you need to have our [Monitoring recipe](/guides
 Then, you can deploy the app by running:
 
 ```nohighlight
-kubectl apply --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/master/manifests-all.yaml`
+kubectl apply --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/master/manifests-all.yaml
+kubectl apply --filename secrets/twitter-api-secret.yaml
 ```
 
 After a while you should be able to see the custom metrics appearing in Grafana.
