@@ -14,9 +14,9 @@ Contents:
 
 Checkout the `docker-compose.yml` files for a more technical description of what this example service provides. Compare with the Kubernetes manifests in the `kubernetes` foleder.
 
-<!-- ![Component Overview](https://github.com/giantswarm/twitter-hot-urls-example/blob/master/_docs/components-overview.png) -->
+<!-- ![Component Overview](https://github.com/giantswarm/twitter-hot-urls-example/blob/master/docs/components-overview.png) -->
 
-![Component Overview](/_docs/components-overview.png)
+![Component Overview](/docs/components-overview.png)
 
 ### tracker
 
@@ -104,7 +104,7 @@ For example:
     Callback URL: <leave this field blank>
 
 
-Additionally an Access Token needs to be generated under "Keys and Access Tokens". In the end four secrets or tokens need to be edited in `_secrets/twitter-api-secret.env` for the docker-compose setup and in `_secrets/twitter-api-secret.yaml` to run the Kubernetes example. For Kubernetes these values need to be encoded with `base64`, please see [Kubernetes documentation](http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually) about secrets.
+Additionally an Access Token needs to be generated under "Keys and Access Tokens". In the end four secrets or tokens need to be edited in `secrets/twitter-api-secret.env` for the docker-compose setup and in `secrets/twitter-api-secret.yaml` to run the Kubernetes example. For Kubernetes these values need to be encoded with `base64`, please see [Kubernetes documentation](http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually) about secrets.
 
 
 
