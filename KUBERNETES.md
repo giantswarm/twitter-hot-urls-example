@@ -37,7 +37,7 @@ Go to [Twitter Application Management](https://apps.twitter.com/) and create a [
 
 After that also create an Access Token under "Keys and Access Tokens". Edit `secrets/twitter-api-secret.yaml` and fill all four data fields with the corresponding [`base64` encoded values]((http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually)).
 
-```bash
+```nohighlight
 printf "exampletokenxyz" | base64
 ```
 

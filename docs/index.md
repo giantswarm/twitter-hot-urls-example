@@ -22,7 +22,7 @@ This component consumes the Twitter Stream API, looking for tweets containing th
 
 The URLs found are stored in the `inbox` redis database.
 
-### inbox
+### inbox-redis
 
 This component is a simple Redis database that receives all found URLs from the `tracker` component. It makes use of the official Redis Docker image.
 
@@ -36,19 +36,13 @@ To prevent accessing the same URL several times, a cache is maintained in the `h
 
 The `resolver` component can be thought of as a worker, processing jobs from a queue. Since resolving URLs is in many cases a time-consuming job, there can be multiple instances of this component working in parallel.
 
-### resolver-scaler
-
-This component contains a little script that watches the size of the `inbox` Redis database to find out if it remains constant. In case it's growing, it logs this information and tells that there shoul be more `resolver` instances to prevent the inbox from growing too big.
-
-As a future improvement, the `resolver-scaler` can be modified to actually initiate the scaling of the `resolver` component via the Giant Swarm API.
-
-### hotlist
+### hotlist-redis
 
 This second Redis database component stores all resolved URLs together with scoring information. It also contains the cache for the `resolver`. Just like the `inbox` component, we use the official Redis Docker image here.
 
 In contrast to the `inbox` component, the `hotlist` provides a volume to persist the database throughout restarts.
 
-### hotlist-cleaner
+### cleaner
 
 This component contains a little helper that periodically removes outdated information from the `hotlist` Redis database.
 
@@ -59,6 +53,8 @@ This is a Python/Flask web application that offers a JSON API to fetch the resul
 ### rebrow
 
 The `rebrow` component offers a web-based user interface ("rebrow" stands for "redis browser") to debug the content of both Redis databases. It makes use of a third party Docker image.
+
+This component is optional and not deployed by default.
 
 ## Getting Credentials to Access Twitter API {#twitter-api}
 
@@ -83,6 +79,8 @@ __Note:__ To get custom metrics you need to have our [Monitoring recipe](/guides
 
 Then, you can deploy the app by running:
 
-`kubectl apply --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/master/manifests-all.yaml`
+```nohighlight
+kubectl apply --filename https://raw.githubusercontent.com/giantswarm/twitter-hot-urls-example/master/manifests-all.yaml`
+```
 
 After a while you should be able to see the custom metrics appearing in Grafana.
