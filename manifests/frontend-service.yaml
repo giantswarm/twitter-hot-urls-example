@@ -10,7 +10,6 @@ spec:
   type: NodePort
   ports:
   - port: 8000
-    nodePort: 30110
   selector:
     app: thux
     component: frontend

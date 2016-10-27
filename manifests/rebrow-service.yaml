@@ -10,7 +10,6 @@ spec:
   type: NodePort
   ports:
   - port: 5001
-    nodePort: 30120
   selector:
     app: thux
     component: rebrow
