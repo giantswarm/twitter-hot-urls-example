@@ -54,8 +54,6 @@ This is a Python/Flask web application that offers a JSON API to fetch the resul
 
 The `rebrow` component offers a web-based user interface ("rebrow" stands for "redis browser") to debug the content of both Redis databases. It makes use of a third party Docker image.
 
-This component is optional and not deployed by default.
-
 ## Getting Credentials to Access Twitter API {#twitter-api}
 
 To access the [streaming API](https://dev.twitter.com/streaming/overview/connecting) of Twitter an personalized [account](https://twitter.com/signup) is needed and some app specific credentials created at [Twitter Application Management](https://apps.twitter.com/).
