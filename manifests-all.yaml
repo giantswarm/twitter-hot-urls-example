@@ -1,9 +1,14 @@
-# Derived from ./manifests/*.yaml
+# Derived from ./manifests
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: thux---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: cleaner
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -26,6 +31,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: frontend
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -49,6 +55,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend
+  namespace: thux
   labels:
     app: thux
     component: frontend
@@ -65,6 +72,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-import-dashboards
+  namespace: thux
   labels:
     app: grafana
     component: import-dashboards
@@ -362,6 +370,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: grafana-import-dashboards
+  namespace: thux
   labels:
     app: grafana
     component: import-dashboards
@@ -382,7 +391,7 @@ spec:
           - >
             echo 'import dashboard "thux"' &&
             curl --silent --fail --show-error \
-              --request POST http://grafana.monitoring.svc.cluster.local:3000/api/dashboards/import \
+              --request POST http://admin:admin@grafana.monitoring.svc:3000/api/dashboards/import \
               --header "Content-Type: application/json" \
               --data-binary @thux.json ;
 
@@ -398,8 +407,8 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # namespace: thux
   name: hotlist-redis
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -424,6 +433,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hotlist-redis
+  namespace: thux
   labels:
     app: thux
     component: hotlist-redis
@@ -439,6 +449,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: inbox-redis
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -461,6 +472,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: inbox-redis
+  namespace: thux
   labels:
     app: thux
     component: inbox-redis
@@ -475,6 +487,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: rebrow
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -497,6 +510,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rebrow
+  namespace: thux
   labels:
     app: thux
     component: rebrow
@@ -513,6 +527,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: resolver
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -590,15 +605,11 @@ spec:
 #     app: thux
 #     component: resolver
 ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: thux
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tracker
+  namespace: thux
 spec:
   replicas: 1
   template:
@@ -654,4 +665,3 @@ spec:
         - name: metrics
           emptyDir:
             medium: Memory
----
