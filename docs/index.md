@@ -1,4 +1,11 @@
-+++ title = "Microservices & Custom Metrics Example" description = "Here we show how to build microservices and offer Prometheus custom metrics in your application." date = "2016-10-27" type = "page" weight = 100 categories = ["guides"] +++
++++
+title = "Microservices & Custom Metrics Example"
+description = "Here we show how to build microservices and offer Prometheus custom metrics in your application."
+date = "2016-10-27"
+type = "page"
+weight = 100
+categories = ["guides"]
++++
 
 # Microservices & Custom Metrics Example
 
