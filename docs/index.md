@@ -4,7 +4,7 @@ description = "Here we show how to build microservices and offer Prometheus cust
 date = "2016-10-27"
 type = "page"
 weight = 100
-categories = ["guides"]
+tags = ["tutorial"]
 +++
 
 # Microservices & Custom Metrics Example
