@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: grafana-import-dashboards
-        image: docker
+        image: giantswarm/tiny-tools
         command: ["/bin/sh", "-c"]
         workingDir: /opt/grafana-import-dashboards
         args:
