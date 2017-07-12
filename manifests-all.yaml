@@ -63,7 +63,6 @@ spec:
   type: NodePort
   ports:
   - port: 8000
-    nodePort: 30110
   selector:
     app: thux
     component: frontend
@@ -384,7 +383,7 @@ spec:
     spec:
       containers:
       - name: grafana-import-dashboards
-        image: docker
+        image: giantswarm/tiny-tools
         command: ["/bin/sh", "-c"]
         workingDir: /opt/grafana-import-dashboards
         args:
@@ -518,7 +517,6 @@ spec:
   type: NodePort
   ports:
   - port: 5001
-    nodePort: 30120
   selector:
     app: thux
     component: rebrow
