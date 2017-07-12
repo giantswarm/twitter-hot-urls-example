@@ -5,7 +5,7 @@
 > If some webpages don't show up immediately wait a bit and reload. Also the Kubernetes Dashboard needs reloading to update its view.
 
 ```bash
-minikube start
+minikube start --memory 4096 --cpus 4
 # --vm-driver kvm
 
 minikube dashboard
