@@ -390,7 +390,7 @@ spec:
           - >
             echo 'import dashboard "thux"' &&
             curl --silent --fail --show-error \
-              --request POST http://admin:admin@grafana.monitoring.svc:3000/api/dashboards/import \
+              --request POST http://admin:admin@grafana.default.svc:3000/api/dashboards/import \
               --header "Content-Type: application/json" \
               --data-binary @thux.json ;
 
