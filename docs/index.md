@@ -9,7 +9,7 @@ tags = ["tutorial"]
 
 # Microservices & Custom Metrics Example
 
-In this example we show how to build a simpe Microservice application that offer custom Prometheus metrics.
+In this example, we show how to build a simple Microservice application that offers custom Prometheus metrics.
 
 The multiple components work hand in hand to collect URLs mentioned on Twitter and create a hotlist of popular URLs. We call this example internally Twitter Hot URLs Example - short THUX.
 
@@ -63,7 +63,7 @@ The `rebrow` component offers a web-based user interface ("rebrow" stands for "r
 
 ## Getting Credentials to Access Twitter API {#twitter-api}
 
-To access the [streaming API](https://dev.twitter.com/streaming/overview/connecting) of Twitter an personalized [account](https://twitter.com/signup) is needed and some app specific credentials created at [Twitter Application Management](https://apps.twitter.com/).
+To access the [streaming API](https://dev.twitter.com/streaming/overview/connecting) of Twitter a personalized [account](https://twitter.com/signup) is needed and some app specific credentials created at [Twitter Application Management](https://apps.twitter.com/).
 
 For example:
 
@@ -89,4 +89,4 @@ kubectl apply --filename https://raw.githubusercontent.com/giantswarm/twitter-ho
 kubectl apply --filename secrets/twitter-api-secret.yaml
 ```
 
-After a while you should be able to see the custom metrics appearing in Grafana.
+After a while, you should be able to see the custom metrics appearing in Grafana.
