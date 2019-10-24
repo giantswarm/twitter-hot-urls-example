@@ -80,7 +80,7 @@ printf "exampletokenxyz" | base64
 
 ## Deploying the Application {#deploy}
 
-__Note:__ To get custom metrics you need to have our [Monitoring recipe](/guides/kubernetes-prometheus/) deployed.
+__Note:__ To get custom metrics you need to have Prometheus deployed.
 
 Then, you can deploy the app by running:
 
