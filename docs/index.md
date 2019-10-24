@@ -1,7 +1,7 @@
 +++
 title = "Microservices & Custom Metrics Example"
 description = "Here we show how to build microservices and offer Prometheus custom metrics in your application."
-date = "2016-10-27"
+date = "2019-10-24"
 type = "page"
 weight = 100
 tags = ["tutorial"]
@@ -72,7 +72,7 @@ For example:
     Website: https://github.com/giantswarm/twitter-hot-urls-example
     Callback URL: <leave this field blank>
 
-After that also create an Access Token under "Keys and Access Tokens". Edit `secrets/twitter-api-secret.yaml` and fill all four data fields with the corresponding [`base64` encoded values]((http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually)).
+After that also create an Access Token under "Keys and Access Tokens". Edit `secrets/twitter-api-secret.yaml` and fill all four data fields with the corresponding [`base64` encoded values](http://kubernetes.io/docs/user-guide/secrets/#creating-a-secret-manually).
 
 ```nohighlight
 printf "exampletokenxyz" | base64
